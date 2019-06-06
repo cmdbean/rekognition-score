@@ -13,6 +13,10 @@ class AwsClient(object):
             region_name='ap-northeast-1'
         )
 
+    def get_rekognition_client(self):
+        load_dotenv(pathlib.Path(__file__).parent.parent.resolve() / '.env')
+        return self.get_client('rekognition')
+
     def get_s3_client(self):
         load_dotenv(pathlib.Path(__file__).parent.parent.resolve() / '.env')
         s3 = self.get_resource('s3')
