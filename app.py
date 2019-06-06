@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from aws.s3 import *
 from aws.rekognition import *
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -40,10 +41,13 @@ def send():
         return '不正なコードです'
     if request.method == 'POST':
         img_file = request.files['img_file']
+        ext = img_file.filename.rsplit('.', 1)[1]
+        ts = str(int(datetime.now().timestamp() * 100))
+        file_path = dir_path + '/' + ts + f'.{ext}'
         binary = img_file.stream.read()
-        upload(binary, 'object/a/test.jpg')
+        upload(binary, file_path)
 
-        return redirect('index')
+        return redirect(f'/?code={code}')
 
 
 @app.route("/check")
@@ -56,10 +60,20 @@ def check():
 
     files = get_file_list(dir_path)
 
+    scores = {}
     target = dir_path.split('/')[0]
-    if target == 'object':
-        for file in files:
-            score = get_label_score()
+    for file in files:
+        if target == 'object':
+            label, score = get_label_score(file, 'Breakfast')
+        elif target == 'face':
+            label, score = get_emotion_score(file, 'HAPPY')
+        elif target == 'person':
+            label, score = get_celebrity_score(file, 'breakfast')
+
+        scores[file.key] = score
+        print(scores)
+
+    return render_template('index.html', code=code, files=files, scores=scores)
 
 
 if __name__ == "__main__":

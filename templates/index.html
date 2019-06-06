@@ -1,17 +1,28 @@
 {% extends "base.html" %}
 {% block content %}
+    <h3>画像ファイルアップロード</h3>
+    <div style="width: 100%">
+        <form method="post" action="/send?code={{code}}" enctype="multipart/form-data">
+            <input type="file" id="img_file" name="img_file" class="col-sm-12">
+            <input type="submit" value="送信" class="btn">
+        </form>
+    </div>
+    <br>
+
+    <h3 style="margin-top:30px; width: 100%;">アップロードした画像</h3>
+    <br>
     <div>
         {% for file in files %}
-            {{ file.key }}
+            <div>
+                <img style="width: 200px; height: 200px;" src="https://nkrekogtest.s3-ap-northeast-1.amazonaws.com/{{ file.key }}">
+                <br>
+                {{ file.key }}<br>
+                {% if scores %}
+                    Score: {{ scores[file.key] }}
+                {% endif %}
+            <br>
+            <br>
+            </div>
         {% endfor %}
     </div>
-
-
-<form method="post" action="/send?code={code}" enctype="multipart/form-data">
-  <input type="file" id="img_file" name="img_file" class="col-sm-12">
-  <input type="submit" value="送信" class="btn">
-</form>
-  {% if img_url %}
-<p><img src="{{ img_url }}"></p>
-  {% endif %}
 {% endblock %}
