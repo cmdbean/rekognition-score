@@ -1,7 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-<form method="post" action="/send" enctype="multipart/form-data">
-  <input type="file" id="img_file" name="img_file" class="col-sm-4">
+    <div>
+        {% for file in files %}
+            {{ file.key }}
+        {% endfor %}
+    </div>
+
+
+<form method="post" action="/send?code={code}" enctype="multipart/form-data">
+  <input type="file" id="img_file" name="img_file" class="col-sm-12">
   <input type="submit" value="送信" class="btn">
 </form>
   {% if img_url %}

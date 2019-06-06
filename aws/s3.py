@@ -1,6 +1,7 @@
 from aws.aws_client import AwsClient
 from pytz import timezone
 from dateutil import parser
+from random import randint
 
 s3_bucket_cli = AwsClient().get_s3_client()
 
@@ -24,3 +25,5 @@ def get_file_list(prefix, min_updated_at=None):
     return files
 
 
+def upload(binary, file_key):
+    return s3_bucket_cli.put_object(Body=binary, Bucket='nkrekogtest', Key=file_key, ACL='public-read')

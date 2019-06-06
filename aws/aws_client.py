@@ -20,9 +20,8 @@ class AwsClient(object):
     def get_s3_client(self):
         load_dotenv(pathlib.Path(__file__).parent.parent.resolve() / '.env')
         s3 = self.get_resource('s3')
-        return s3.Bucket(os.environ.get('S3_BUCKET_NAME'))
 
-        return s3
+        return s3.Bucket(os.environ.get('S3_BUCKET_NAME'))
 
     def get_resource(self, key):
         session = self.get_base_session()

@@ -20,7 +20,7 @@ def detect_labels(obj):
     return rekognition_cli.detect_labels(Image={'S3Object': {'Bucket': obj.bucket_name, 'Name': obj.key}})
 
 
-def get_label_score(response: Dict):
+def get_label_score(response: Dict, label: str):
     labels = response['Labels']
     if not labels:
         return None, 0
